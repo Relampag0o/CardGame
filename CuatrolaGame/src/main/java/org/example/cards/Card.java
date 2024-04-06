@@ -1,4 +1,4 @@
-package org.example;
+package org.example.cards;
 
 // THIS IS THE SUPERCLASS FOR EACH CARD!
 public class Card {
