@@ -1,7 +1,6 @@
 package org.example;
 
 import org.example.cards.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,15 +38,52 @@ public class Launcher {
             playerIndex = (playerIndex + 1) % players.size();
         }
 
-        // 5. Simulate the game
-        // Each player shows their hand
-        for (Player player : players) {
-            System.out.println("Player's hand:");
-            player.showHand();
-            System.out.println();
-        }
+        // Create teams
+        Team team1 = new Team(players.get(0), players.get(1));
+        Team team2 = new Team(players.get(2), players.get(3));
+        List<Team> teams = new ArrayList<>();
+        teams.add(team1);
+        teams.add(team2);
 
-        // Print the suit to play
-        System.out.println("The suit to play is: " + suitToPlay);
+        // Play the game
+        playGame(teams, suitToPlay);
+    }
+
+    public static void playGame(List<Team> teams, String suitToPlay) {
+        int round = 1;
+        while (teams.get(0).getPoints() < 3 && teams.get(1).getPoints() < 3) {
+            System.out.println("Round " + round + ":");
+            playRound(teams, suitToPlay);
+            round++;
+        }
+        // Determine the winning team
+        Team winningTeam = teams.get(0).getPoints() >= 3 ? teams.get(0) : teams.get(1);
+        System.out.println("The winning team is: Team " + (teams.indexOf(winningTeam) + 1));
+    }
+
+    public static void playRound(List<Team> teams, String suitToPlay) {
+        System.out.println("The suit to play in this round is: " + suitToPlay);
+        List<Card> cardsPlayed = new ArrayList<>();
+        for (Team team : teams) {
+            for (Player player : team.getPlayers()) {
+                Card playedCard = player.playCard(suitToPlay);
+                cardsPlayed.add(playedCard);
+                System.out.println("Player from Team " + (teams.indexOf(team) + 1) + " played: " + playedCard);
+            }
+        }
+        // Determine which card  wins the round
+        Card winningCard = cardsPlayed.getFirst();
+        Team winningTeam = teams.getFirst();
+        for (int i = 1; i < cardsPlayed.size(); i++) {
+            Card card = cardsPlayed.get(i);
+            if (card.getSuit().equals(suitToPlay) && card.getValue() > winningCard.getValue()) {
+                winningCard = card;
+                winningTeam = teams.get(i / 2); // Each team has 2 players
+            }
+        }
+        // Update points of the winning team
+        winningTeam.addPoint();
+        System.out.println("The winning card is: " + winningCard);
+        System.out.println("The winning team of this round is: Team " + (teams.indexOf(winningTeam) + 1));
     }
 }

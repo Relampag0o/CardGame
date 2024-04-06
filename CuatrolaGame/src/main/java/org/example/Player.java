@@ -17,6 +17,19 @@ public class Player {
         this.hand.add(card);
     }
 
+    public Card playCard(String suitToPlay) {
+        for (Card card : hand) {
+            if (card.getSuit().equals(suitToPlay)) {
+                hand.remove(card);
+                return card;
+            }
+        }
+        // If no card of the suit to play, play any card
+        Card card = hand.get(0);
+        hand.remove(0);
+        return card;
+    }
+
     public List<Card> getHand() {
         return this.hand;
     }
