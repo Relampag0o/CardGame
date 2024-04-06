@@ -3,7 +3,7 @@ package org.example.cards;
 public class Ace extends Card {
 
     public Ace(String suit){
-        super(suit, 14);
+        super(suit, 15);
     }
 
     @Override
